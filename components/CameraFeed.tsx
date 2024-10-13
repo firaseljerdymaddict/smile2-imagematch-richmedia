@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import lottieRain from "@/public/lotties/lottie-arrow.json";
-import lottieFlash from "@/public/lotties/lottie-flash.json";
+import Image from "next/image"; // Import Image from next/image
 
 interface CameraFeedProps {
   onCaptureComplete: (imageData: string) => void; // Callback to pass image data
@@ -66,7 +66,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
             setTimeout(() => {
               // Send the captured image back to the parent (Home component)
               onCaptureComplete(dataURL);
-              console.log("Captured image sent to parent");
+              //console.log("Captured image sent to parent");
             }, 1000); // Additional delay to let the exit animation complete
           }, 2000); // 2 seconds delay before exit starts
         }, 300); // Flash effect delay
@@ -110,9 +110,11 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
             }}
           >
             {capturedImage ? (
-              <img
+              <Image
                 src={capturedImage}
                 alt="Captured snapshot"
+                width={500} // Specify a width for optimization
+                height={500} // Specify a height for optimization
                 className="w-full h-full object-cover rounded-md md:w-[80%] md:h-full"
               />
             ) : (

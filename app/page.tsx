@@ -27,11 +27,10 @@ export default function Home() {
   const [showMatchingPage, setShowMatchingPage] = useState(false);
   const [showTrailerPage, setShowTrailerPage] = useState(false); // New state for TrailerPage
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [isExiting, setIsExiting] = useState(false); // To handle exit animation
 
   // Function to handle the scene change from LandingPage to ShowImageScreen
   const handleSceneChange = () => {
-    console.log("Switching from LandingPage to ShowImageScreen...");
+    //console.log("Switching from LandingPage to ShowImageScreen...");
     setTimeout(() => {
       setShowLandingPage(false);
       setShowImageScreen(true);
@@ -40,7 +39,7 @@ export default function Home() {
 
   // Function to handle capture completion from CameraFeed
   const handleCaptureComplete = (imageData: string) => {
-    console.log("Captured image data:", imageData); // Debugging log
+    //console.log("Captured image data:", imageData); // Debugging log
     setCapturedImage(imageData); // Store the captured image data
     setShowCameraScreen(false); // Hide the camera screen after image is captured
     setShowMatchingPage(true); // Show the MatchingPage
@@ -48,26 +47,16 @@ export default function Home() {
 
   // Function to handle the transition from MatchingPage to the TrailerPage
   const handleMatchingPageExit = () => {
-    console.log("Exiting MatchingPage...");
-    setIsExiting(true); // Trigger the exit animation in MatchingPage
+    //console.log("Exiting MatchingPage...");
     setTimeout(() => {
       setShowMatchingPage(false); // Hide MatchingPage after exit animation completes
       setShowTrailerPage(true); // Show the TrailerPage
     }, 1000); // Match the duration of the exit animation
   };
 
-  // Function to handle the transition from TrailerPage or exit logic
-  const handleTrailerPageExit = () => {
-    console.log("Exiting TrailerPage...");
-    // Here you can add any logic to move to the next page or restart the flow
-    // For example:
-    // setShowTrailerPage(false);
-    // setShowLandingPage(true); // Example to go back to the LandingPage
-  };
-
   // Function to directly switch to the camera screen
   const handleSceneChangeToFuture = () => {
-    console.log("Switching to Camera Screen directly...");
+    //console.log("Switching to Camera Screen directly...");
     setShowImageScreen(false);
     setShowCameraScreen(true);
   };
@@ -95,7 +84,7 @@ export default function Home() {
       {/* Show TrailerPage after the MatchingPage */}
       {showTrailerPage && (
         <TrailerPage
-          videoUrl="https://www.example.com/sample-video.mp4"
+          videoUrl="https://maddict-videos.s3.eu-north-1.amazonaws.com/Smile+2+_+Official+Trailer+(2024+Movie)+-+Naomi+Scott%2C+Lukas+Gage.mov"
           bookingUrl="https://www.fourstarfilms.me/movie/93/smile-2/" // URL that opens in new tab
         />
       )}
