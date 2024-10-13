@@ -21,7 +21,7 @@ const ShowImage: React.FC<ShowImageProps> = ({ onTryNowClick }) => {
     <AnimatePresence>
       {!isExiting && ( // Only show the content while it's not exiting
         <motion.div
-          className="bg-black h-screen flex flex-col"
+          className="bg-black h-[100svh] flex flex-col"
           initial={{ opacity: 0 }} // Initial state (fully transparent)
           animate={{ opacity: 1 }} // Final state (fully visible)
           exit={{ opacity: 0 }} // Exit state (fade out)
