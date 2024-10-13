@@ -12,8 +12,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        gothicSerif: ["var(--font-gothicSerif)", "serif"], // Reference the variable
+      },
     },
   },
   plugins: [],
 };
+
 export default config;
