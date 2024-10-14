@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { FaTicketAlt, FaPlayCircle } from "react-icons/fa"; // Importing icons for the buttons
 import { motion, AnimatePresence } from "framer-motion"; // Importing Framer Motion for animations
@@ -18,9 +17,32 @@ const BookNowPage: React.FC<BookNowPageProps> = ({
 
   const handleWatchTrailerClick = () => {
     setIsExiting(true); // Start the exit animation
+
+    // Trigger the "watch_trailer" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "watch_trailer", {
+        event_category: "User Actions",
+        event_label: "Watch Trailer Button",
+        value: 1,
+      });
+    }
+
     setTimeout(() => {
       onWatchTrailerClick(); // Trigger the trailer action after 1 second
     }, 1000); // 1-second delay before triggering the trailer action
+  };
+
+  const handleBookNowClick = () => {
+    // Trigger the "book_now_first" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "book_now_first", {
+        event_category: "User Actions",
+        event_label: "Book Now Button",
+        value: 1,
+      });
+    }
+
+    window.open(bookingUrl, "_blank"); // Open booking link in a new tab
   };
 
   return (
@@ -61,7 +83,7 @@ const BookNowPage: React.FC<BookNowPageProps> = ({
             {/* Book Now Button */}
             <button
               className="flex items-center justify-center bg-[#B60000] text-white font-gothicSerif text-lg font-bold py-3 rounded-full hover:bg-red-700 transition-all duration-300 w-[45vw] md:w-[25vw] lg:w-[20vw]"
-              onClick={() => window.open(bookingUrl, "_blank")} // Open booking link in a new tab
+              onClick={handleBookNowClick} // Call the event tracking and open booking link
             >
               <FaTicketAlt className="mr-2" /> {/* Book Now Icon */}
               Book Now

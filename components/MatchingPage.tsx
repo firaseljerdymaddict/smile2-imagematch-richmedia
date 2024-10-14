@@ -25,6 +25,14 @@ const MatchingPage: React.FC<MatchingPageProps> = ({
 
   const handleRetry = () => {
     setIsExiting(true); // Trigger exit animations
+    // Trigger the "retry_image_capture" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "retry_image_capture", {
+        event_category: "User Actions",
+        event_label: "Retry Image Capture",
+        value: 1,
+      });
+    }
     setTimeout(() => {
       onRetry(); // Call the retry function after animations
     }, 1000); // Adjust this delay to match the exit animation duration

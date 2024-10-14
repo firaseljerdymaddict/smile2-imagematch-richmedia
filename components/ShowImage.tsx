@@ -12,6 +12,14 @@ const ShowImage: React.FC<ShowImageProps> = ({ onTryNowClick }) => {
 
   const handleExit = () => {
     setIsExiting(true); // Trigger exit animations
+    // Trigger the "try_now_button" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "try_now_button", {
+        event_category: "User Actions",
+        event_label: "Try Now Button",
+        value: 1,
+      });
+    }
     setTimeout(() => {
       onTryNowClick(); // Switch to future screen after animations
     }, 1000); // Adjust this delay to match the exit animation duration

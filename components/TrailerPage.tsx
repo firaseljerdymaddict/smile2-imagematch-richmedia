@@ -8,6 +8,15 @@ interface TrailerPageProps {
 
 const TrailerPage: React.FC<TrailerPageProps> = ({ videoUrl, bookingUrl }) => {
   const handleBookNowClick = () => {
+    // Trigger the "book_now_last_page" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "book_now_last_page", {
+        event_category: "User Actions",
+        event_label: "Book Now Last Page",
+        value: 1,
+      });
+    }
+
     window.open(bookingUrl, "_blank"); // Opens the URL in a new tab
   };
 

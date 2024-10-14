@@ -56,6 +56,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
   // Handle button press to trigger exit animations
   const handleStartClick = () => {
     setIsExiting(true);
+    // Trigger the "start_button_landing_page" event in Google Analytics
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "start_button_landing_page", {
+        event_category: "User Actions",
+        event_label: "Landing Page Start Button",
+        value: 1,
+      });
+    }
     setTimeout(() => onStartClick(), 1000); // Trigger the scene change in the parent component after the animation starts
   };
 

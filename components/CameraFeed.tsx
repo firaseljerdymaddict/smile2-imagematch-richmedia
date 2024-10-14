@@ -54,6 +54,15 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
         const dataURL = canvas.toDataURL("image/png");
         setCapturedImage(dataURL); // Store captured image locally
 
+        // Trigger the "image-taken" event in Google Analytics
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "image_taken", {
+            event_category: "User Actions",
+            event_label: "Snapshot",
+            value: 1,
+          });
+        }
+
         setIsFlashing(true);
         setTimeout(() => {
           setIsFlashing(false);
