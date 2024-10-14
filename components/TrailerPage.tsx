@@ -43,7 +43,7 @@ const TrailerPage: React.FC<TrailerPageProps> = ({ videoUrl, bookingUrl }) => {
       >
         {/* Adding Book Now Button */}
         <button
-          className="bg-[#B60000] text-white font-bold py-3 px-8 rounded-full hover:bg-red-700 transition-all duration-300"
+          className="bg-[#B60000] font-gothicSerif text-white font-bold py-3 px-8 rounded-full hover:bg-red-700 transition-all duration-300"
           onClick={handleBookNowClick} // This uses the previously defined function
         >
           Book Now

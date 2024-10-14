@@ -27,15 +27,15 @@ const BookNowPage: React.FC<BookNowPageProps> = ({
     <AnimatePresence>
       {!isExiting && (
         <motion.div
-          className="h-[100svh] bg-black flex flex-col items-center justify-between"
+          className="h-[100svh] bg-black flex flex-col justify-between items-center"
           initial={{ opacity: 0 }} // Start with opacity 0
           animate={{ opacity: 1 }} // Animate to full opacity
           exit={{ opacity: 0 }} // Fade out when exiting
-          transition={{ duration: 1 }} // Smooth 1 second fade in and out
+          transition={{ duration: 1 }} // Smooth 1-second fade in and out
         >
-          {/* Top Section: Reserved for the next image (70% of the screen height) */}
+          {/* Top Section for the Image */}
           <motion.div
-            className="h-[70%] w-full flex items-center justify-center mt-16 md:mt-16 lg:mt-14"
+            className="flex-grow-0 flex-shrink-0 h-[60%] w-[90%] flex items-center justify-center mt-16 md:mt-16 lg:mt-14"
             initial={{ y: -50, opacity: 0 }} // Image starts slightly offscreen and invisible
             animate={{ y: 0, opacity: 1 }} // Slide in to its normal position and become visible
             exit={{ y: -50, opacity: 0 }} // Slide out and fade when exiting
@@ -44,15 +44,15 @@ const BookNowPage: React.FC<BookNowPageProps> = ({
             <Image
               src="/images/poster.jpg"
               alt="Next Image"
-              width={1000} // You can set the width and height for proper aspect ratio
-              height={500}
+              width={500} // Set the width and height for proper aspect ratio
+              height={250}
               className="w-full md:w-[65%] lg:w-[50%] h-auto object-cover"
             />
           </motion.div>
 
-          {/* Bottom Section: Two Buttons side by side (Remaining 30% of the screen) */}
+          {/* Bottom Section for the Buttons */}
           <motion.div
-            className="h-[30%] w-full flex flex-row justify-center items-center space-x-4"
+            className="flex-grow-0 flex-shrink-0 h-[30%] w-full flex flex-row justify-center items-center space-x-4"
             initial={{ y: 50, opacity: 0 }} // Buttons start below the view and invisible
             animate={{ y: 0, opacity: 1 }} // Slide in from below and become visible
             exit={{ y: 50, opacity: 0 }} // Slide down and fade out when exiting
