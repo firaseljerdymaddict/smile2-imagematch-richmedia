@@ -17,6 +17,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
   const [flashComplete, setFlashComplete] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false); // Camera readiness state
 
   // Access camera stream
   useEffect(() => {
@@ -123,6 +124,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
                 autoPlay
                 playsInline
                 className="w-full h-full object-cover rounded-md md:w-[80%] md:h-full"
+                onLoadedMetadata={() => setIsCameraReady(true)} // Set camera ready when metadata is loaded
               />
             )}
           </motion.div>
@@ -143,7 +145,9 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                className="relative flex items-center justify-center w-20 h-20 bg-white rounded-full md:w-32 md:h-32"
+                className={`relative flex items-center justify-center w-20 h-20 bg-white rounded-full md:w-32 md:h-32 ${
+                  !isCameraReady ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={takeSnapshot}
                 initial={{ opacity: 1 }}
                 animate={{
@@ -155,6 +159,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ onCaptureComplete }) => {
                   opacity: 0, // Fade out
                   transition: { duration: 0.5, ease: "easeInOut" },
                 }}
+                disabled={!isCameraReady} // Disable the button until the camera is ready
               >
                 <div className="absolute inset-1 border-4 border-black rounded-full"></div>
               </motion.button>

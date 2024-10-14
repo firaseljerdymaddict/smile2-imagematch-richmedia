@@ -52,7 +52,7 @@ const BookNowPage: React.FC<BookNowPageProps> = ({
 
           {/* Bottom Section for the Buttons */}
           <motion.div
-            className="flex-grow-0 flex-shrink-0 h-[30%] w-full flex flex-row justify-center items-center space-x-4"
+            className="flex-grow-0 mt-12 sm:mt-16 flex-shrink-0 h-[30%] w-full flex flex-row justify-center items-center space-x-4"
             initial={{ y: 50, opacity: 0 }} // Buttons start below the view and invisible
             animate={{ y: 0, opacity: 1 }} // Slide in from below and become visible
             exit={{ y: 50, opacity: 0 }} // Slide down and fade out when exiting
