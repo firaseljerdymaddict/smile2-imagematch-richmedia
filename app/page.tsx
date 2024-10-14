@@ -19,18 +19,21 @@ const MatchingPage = dynamic(() => import("@/components/MatchingPage"), {
 const TrailerPage = dynamic(() => import("@/components/TrailerPage"), {
   ssr: false,
 });
+const BookNowPage = dynamic(() => import("@/components/BookNowPage"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [showImageScreen, setShowImageScreen] = useState(false);
   const [showCameraScreen, setShowCameraScreen] = useState(false);
   const [showMatchingPage, setShowMatchingPage] = useState(false);
-  const [showTrailerPage, setShowTrailerPage] = useState(false); // New state for TrailerPage
+  const [showBookNowPage, setShowBookNowPage] = useState(false); // New state for BookNowPage
+  const [showTrailerPage, setShowTrailerPage] = useState(false); // State for TrailerPage
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   // Function to handle the scene change from LandingPage to ShowImageScreen
   const handleSceneChange = () => {
-    //console.log("Switching from LandingPage to ShowImageScreen...");
     setTimeout(() => {
       setShowLandingPage(false);
       setShowImageScreen(true);
@@ -39,26 +42,34 @@ export default function Home() {
 
   // Function to handle capture completion from CameraFeed
   const handleCaptureComplete = (imageData: string) => {
-    //console.log("Captured image data:", imageData); // Debugging log
     setCapturedImage(imageData); // Store the captured image data
     setShowCameraScreen(false); // Hide the camera screen after image is captured
     setShowMatchingPage(true); // Show the MatchingPage
   };
 
-  // Function to handle the transition from MatchingPage to the TrailerPage
+  // Function to handle the transition from MatchingPage to the BookNowPage
   const handleMatchingPageExit = () => {
-    //console.log("Exiting MatchingPage...");
     setTimeout(() => {
       setShowMatchingPage(false); // Hide MatchingPage after exit animation completes
-      setShowTrailerPage(true); // Show the TrailerPage
+      setShowBookNowPage(true); // Show the BookNowPage
     }, 1000); // Match the duration of the exit animation
   };
 
   // Function to directly switch to the camera screen
   const handleSceneChangeToFuture = () => {
-    //console.log("Switching to Camera Screen directly...");
     setShowImageScreen(false);
     setShowCameraScreen(true);
+  };
+
+  const handleRetry = () => {
+    setShowMatchingPage(false); // Hide the MatchingPage after the animation
+    setShowCameraScreen(true); // Show the CameraFeed again to retake the picture
+  };
+
+  // Function to handle "Watch Trailer" button click and show TrailerPage
+  const handleWatchTrailerClick = () => {
+    setShowBookNowPage(false); // Hide the BookNowPage
+    setShowTrailerPage(true); // Show the TrailerPage
   };
 
   return (
@@ -78,10 +89,19 @@ export default function Home() {
         <MatchingPage
           imageUrl={capturedImage}
           onExitComplete={handleMatchingPageExit} // Pass the exit function to MatchingPage
+          onRetry={handleRetry} // Pass the retry function to MatchingPage
         />
       )}
 
-      {/* Show TrailerPage after the MatchingPage */}
+      {/* Show BookNowPage after the MatchingPage */}
+      {showBookNowPage && (
+        <BookNowPage
+          bookingUrl="https://www.fourstarfilms.me/movie/93/smile-2/" // URL that opens in new tab
+          onWatchTrailerClick={handleWatchTrailerClick} // Pass the handler for watching the trailer
+        />
+      )}
+
+      {/* Show TrailerPage after clicking "Watch Trailer" */}
       {showTrailerPage && (
         <TrailerPage
           videoUrl="https://maddict-videos.s3.eu-north-1.amazonaws.com/Smile+2+_+Official+Trailer+(2024+Movie)+-+Naomi+Scott%2C+Lukas+Gage.mov"

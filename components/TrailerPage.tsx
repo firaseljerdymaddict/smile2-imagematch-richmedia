@@ -41,23 +41,13 @@ const TrailerPage: React.FC<TrailerPageProps> = ({ videoUrl, bookingUrl }) => {
         animate={{ y: 0, opacity: 1 }} // Moves up into place and fades in
         transition={{ duration: 0.8, delay: 1 }} // Delays after video scales in
       >
-        <motion.button
-          className="bg-[#B60000] text-white font-gothicSerif text-lg font-bold py-3 rounded-full hover:bg-red-700 transition-all duration-300 w-[60vw] md:w-[60vw] lg:w-[60vw]"
-          onClick={handleBookNowClick}
-          whileHover={{ scale: 1.1 }} // Slightly scale up on hover
-          animate={{
-            scale: [1, 1.05, 1], // Pulse effect (grow and shrink)
-          }}
-          transition={{
-            repeat: Infinity, // Repeat the animation infinitely
-            repeatType: "reverse", // Reverse the animation after each cycle
-            duration: 1.5, // Pulse duration
-            ease: "easeInOut", // Smooth transition
-            delay: 2, // Delay until after initial animation
-          }}
+        {/* Adding Book Now Button */}
+        <button
+          className="bg-[#B60000] text-white font-bold py-3 px-8 rounded-full hover:bg-red-700 transition-all duration-300"
+          onClick={handleBookNowClick} // This uses the previously defined function
         >
-          Book Ticket Now
-        </motion.button>
+          Book Now
+        </button>
       </motion.div>
     </motion.div>
   );

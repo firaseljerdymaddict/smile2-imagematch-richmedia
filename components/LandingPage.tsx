@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
-import lottieRain from "@/public/lotties/lottie-rain.json"; // Adjust path if needed
+import lottieRain from "@/public/lotties/lottie-animation.json"; // Adjust path if needed
 
 interface LandingPageProps {
   onStartClick: () => void; // onStartClick is a function that returns nothing (void)
@@ -12,10 +12,13 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
   const [isExiting, setIsExiting] = useState(false);
+  const [showLottie, setShowLottie] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   // Animation Variants
   const containerVariants = {
     visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+    exit: { opacity: 0, scale: 0.9, transition: { duration: 1 } }, // Container exit animation
   };
 
   const textVariants = {
@@ -38,6 +41,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
     exit: { opacity: 0, y: 50, transition: { duration: 0.8 } }, // Button exit animation
   };
 
+  const lottieVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 1 } },
+    exit: { opacity: 0, y: 50, transition: { duration: 0.8 } }, // Lottie exit animation
+  };
+
   const bgVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 1.5 } },
@@ -47,33 +56,35 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
   // Handle button press to trigger exit animations
   const handleStartClick = () => {
     setIsExiting(true);
-    onStartClick(); // Trigger the scene change in the parent component after the animation starts
+    setTimeout(() => onStartClick(), 1000); // Trigger the scene change in the parent component after the animation starts
   };
+
+  // Trigger Lottie after a 1-second delay, then trigger the button after Lottie starts
+  useEffect(() => {
+    const lottieTimeout = setTimeout(() => {
+      setShowLottie(true);
+    }, 1000); // Delay Lottie by 1 second
+
+    const buttonTimeout = setTimeout(() => {
+      setShowButton(true);
+    }, 2500); // Delay the button appearance by 1.5 seconds after the Lottie starts (total 2.5 seconds)
+
+    return () => {
+      clearTimeout(lottieTimeout);
+      clearTimeout(buttonTimeout);
+    };
+  }, []);
 
   return (
     <AnimatePresence>
       {!isExiting && (
         <motion.div
-          className="relative h-[100svh] w-full flex flex-col justify-center items-center overflow-hidden"
+          className="relative h-[100svh] w-full flex flex-col justify-between items-center overflow-hidden"
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={containerVariants}
         >
-          {/* Lottie Animation Overlay */}
-          <div className="absolute top-0 w-full h-[50vh] z-10 flex justify-center items-start">
-            <Lottie
-              animationData={lottieRain}
-              loop={true}
-              className="w-full h-auto" // Ensures the Lottie animation stretches to cover the top part of the screen
-              style={{
-                position: "absolute",
-                zIndex: 10,
-                pointerEvents: "none", // Ensures it doesn't block other UI elements
-              }}
-            />
-          </div>
-
           {/* Background Image */}
           <motion.div className="absolute inset-0" variants={bgVariants}>
             <Image
@@ -85,9 +96,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
             />
           </motion.div>
 
-          {/* Text Overlay */}
+          {/* Text Overlay - Now at the top */}
           <motion.div
-            className="absolute text-center w-full text-[#B6292E] font-bold font-gothicSerif mt-40 sm:mt-40 md:mt-24 z-20"
+            className="relative text-center w-full text-[#B6292E] font-bold font-gothicSerif z-20 mt-12"
             variants={textVariants}
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl leading-none tracking-widest w-[100%]">
@@ -101,26 +112,52 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartClick }) => {
             </h1>
           </motion.div>
 
-          {/* Button with pulsing animation only when not exiting */}
-          <motion.div
-            className="absolute bottom-10 w-full flex justify-center z-20"
-            variants={buttonVariants}
-            initial="hidden"
-            animate={isExiting ? "visible" : ["visible", "pulse"]} // Stop pulsing when exiting
-            exit="exit" // This enables the button to animate out
-          >
-            <motion.button
-              className="bg-[#B60000] text-white font-gothicSerif font-bold text-lg rounded-[70px] w-[75%] md:w-[70%] lg:w-[60%] max-w-[1000px] py-3 md:py-4 lg:py-5"
-              whileHover={{ scale: 1.2 }} // Button scales up on hover for additional interactivity
-              whileTap={{
-                scale: 0.95,
-                boxShadow: "0px 0px 15px rgba(0,0,0,1)",
-              }} // Button scales down on press with a shadow effect
-              onClick={handleStartClick}
-            >
-              START
-            </motion.button>
-          </motion.div>
+          {/* Lottie Animation - Starts after a 1-second delay */}
+          <AnimatePresence>
+            {showLottie && (
+              <motion.div
+                className="relative w-full flex flex-col items-center justify-center z-20 ml-16 mb-16"
+                style={{ flexGrow: 1 }}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={lottieVariants}
+              >
+                <div className="w-full h-auto flex justify-center items-center z-10 pointer-events-none">
+                  <Lottie
+                    animationData={lottieRain}
+                    loop={false}
+                    className="w-full h-auto max-w-[800px]" // Ensures the Lottie animation scales responsively and is centered
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Button appears after Lottie starts */}
+          <AnimatePresence>
+            {showButton && (
+              <motion.div
+                className="absolute bottom-10 w-full flex justify-center z-20"
+                variants={buttonVariants}
+                initial="hidden"
+                animate={isExiting ? "visible" : ["visible", "pulse"]} // Stop pulsing when exiting
+                exit="exit" // This enables the button to animate out
+              >
+                <motion.button
+                  className="bg-[#B60000] text-white font-gothicSerif font-bold text-lg rounded-[70px] w-[75%] md:w-[70%] lg:w-[60%] max-w-[1000px] py-3 md:py-4 lg:py-5"
+                  whileHover={{ scale: 1.2 }} // Button scales up on hover for additional interactivity
+                  whileTap={{
+                    scale: 0.95,
+                    boxShadow: "0px 0px 15px rgba(0,0,0,1)",
+                  }} // Button scales down on press with a shadow effect
+                  onClick={handleStartClick}
+                >
+                  START
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
